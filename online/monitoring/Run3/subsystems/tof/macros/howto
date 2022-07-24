@@ -1,0 +1,42 @@
+Memo: Howto run Run3_TOF_OnlineMonitor StandAlone.
+11/15_2202 Edit by Kuroki(kuroki@bnl.gov)
+
+
+make a link to a data file.
+va007: > ln -s /...../****.PRDF data.prdf
+And you setenv TOF parametars DirPath ($TOFPARADIR).
+You must write deadslatID on "TofKnownDeadSlat.conf".
+link ...
+va007: > setenv TOFPARADIR /home/yourhome/tofpara
+or
+va007: > setenv TOFPARADIR $ONLMONCONF
+
+So,
+@one terminal
+va007: > root -b
+root [0] .x run_server.C 
+root [1] prun()
+
+@two terminal
+va007: > root -l
+root [0] .x run_client.C 
+root [1] draw_client()
+
+
+PS: You need these files.
+
+calib/
+	tofcablemap.txt
+	tofElossConv.txt
+	toffemmap.txt
+	tofGlobalT.txt
+	tofKnownDeadSlat.conf
+	tofpanelgeo.txt
+	tofPedestal.txt
+	tofQvcConv.txt
+	tofslatoffset.txt
+	tofSlewPar.txt
+	tofToffset.txt
+	tofTvcConv.txt
+	tofVelocity.txt
+	tofYoffset.txt

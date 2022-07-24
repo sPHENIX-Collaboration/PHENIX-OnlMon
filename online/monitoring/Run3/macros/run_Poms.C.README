@@ -1,0 +1,169 @@
+//////////////////////////////////////////////////////////////////////////////
+
+README file for run_Poms.C and supporting libpoms.so library
+
+Author:         Cody McCain (mcm99c@acu.edu)
+Last Modified:  Jan 9, 2003
+
+Programmer's reference at bottom of file.
+
+//////////////////////////////////////////////////////////////////////////////
+
+What Is POMS?
+
+POMS stands for Phenix Online Monitoring System and serves as
+a GUI framework for launching each subsystem's online
+monitoring macro.  Having centralized access to each subsystem's
+online monitoring data gives the offline shifter easy access
+to each subsystem's latest data with point and click control!
+
+
+How it works:
+
+The POMS macro "run_Poms.C" loads the libpoms.so shared library and
+registers the various subsystems with the PomsMainFrame object.  This
+object creates a GUI menu which gives access to each subsystem's commands
+such as Draw() and DrawPS().  It also allows the user to show (bring to the
+foreground) all of a specific subsystem's windows.
+
+The various subsystem's online monitoring clients rely on a server counterpart 
+to provide the latest histograms to the clients.  Please reference the server 
+documentation or consult Chris Pinkenburg (pinkenburg@bnl.gov) for starting 
+and stopping the servers. 
+
+I will provide a reference to the server documentation as soon as it
+becomes available.
+
+
+How do I start it?
+
+1.  From the terminal, ssh to a va machine as 'phnxrc'.
+
+    ssh -l phnxrc va001.phenix.bnl.gov   // note: (va001-va032 are valid)
+
+2.  Set up the environment.
+
+    cd online_monitoring
+    source setup_onlmon.csh
+
+3.  Start ROOT
+    
+    root
+
+4.  Load the run_Poms.C macro
+
+    .L run_Poms.C
+
+5.   Start POMS
+
+     StartPoms()
+
+6.   At this point, POMS will start, and many messages will scroll past on 
+     the ROOT terminal while the subsystems are loaded.  POMS will also
+     discover your screen size and position the menu aligned to the right
+     edge of your screen.
+
+7.   Select a subsystem by clicking on its name.  The menu acts as a window
+     shutter and will shift the other subsytems out of the way so that the
+     selected subsystem's options can be displayed directly below the 
+     subsystem's name.  By default, all the subsystems have exactly the same
+     commands available (however, they can be extended for any individual
+     subsystem).  Currently, "Save to Postcript" and "Save to HTML" are provided
+     on the menu bar, but most either have not been fully implemented or do
+     not work as of the writing of this document.
+
+8.   To draw (or redraw with updated histograms) a subsystem's canvases,
+     simply click draw.  Drawing will not happen immediately as histogram
+     data must be calculated.  Be patient while the canvases are drawn.
+
+9.   After many windows are on the screen, a particular subsystem's windows
+     can be brought to the foreground by simply clicking "Show Canvases"
+
+10.  Multiple sub systems can be monitored at a time.  The current version
+     of some of the subsystem's macros will Redraw every subsystem's canvas
+     but will only update it's own histograms.  I will try to help remedy this
+     situation in the next couple of days as I need to edit some of the
+     subsystem macros.
+
+*** Please email any bug fixes to mcm99c@acu.edu ***
+
+Please Note:  This GUI interface calls (does not implement) the subsytem monitoring
+macros.  If a certain subsystem monitor dies, it is not necessarily the POMS client.
+Please contact the author responsible for that particular subsystem monitor.
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Programmer's Reference
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+1.  To use the POMS library, load the shared library using
+    
+    gSystem->Load("libpoms.so");
+
+
+2.  To access the PomsMainFrame object (implemented as a singleton)
+    
+    PomsMainFrame* pmf;
+    pmf = PomsMainFrame::Instance();
+
+    Upon creation of the PomsMainFrame object, it will set the subsystem macro path
+    to the path located in the $ONLMON_MACROS environment variable.  If you wish
+    to specify a different path, call
+    
+    pmf->SetMacroPath("/path/to/macros");
+
+3.  To register a subsystem (most cases will use this statement)
+
+    pmf->RegisterSubSystem("Beam Beam Counter", "bbc");
+    
+    *This will attempt to load the macro, "run_bbc.C" and will assign the
+    default actions to the bbc: Draw (calls bbcDrawInit() [only once],
+    then bbcDraw()), Save to Postscript (calls bbcDrawPS()), Save to HTML
+    (calls bbcDrawHtml()), and Show Canvases which shows all canvases
+    with names containing bbc (case insensitive).
+
+    If one prefers not to assign the default actions to the subsystem,
+    they can call
+
+    pmf->RegisterSubSystem("Beam Beam Counter", "bbc", 0);
+
+    To avoid looking for "run_bbc.C" and attempting to load it, call
+
+    pmf->RegisterSubSystem("Beam Beam Counter", "bbc", 1, 0);
+
+    this means, the macro for the subsystem must be manually loaded
+    by making a call to 
+
+    gROOT->LoadMacro("name.C");
+
+    remember parameter three (above shown as 1) is whether or not to load
+    the default actions.  See the header file Poms.h for more details.
+
+    Finally, one can register a subsystem by calling
+    
+    pmf->RegisterSubSystem(subSystem);
+
+    where subSystem is a pointer to a SubSystem object.
+
+4.  To create a SubSystem object instead of using the default methods above,
+    create a SubSystem object by using the constructor
+
+    SubSystem(const char* name, const char* prefix, int loadLibrary = 1);
+
+    To load the default actions call,
+    
+    subSystem->AddDefaultActions();
+
+    To add a specific action ("a menu item"), call
+   
+    subSystem->AddAction("CINT command", "menu title/description");
+
+    Don't forget to register your SubSystem with the PomsMainFrame
+
+    pmf->RegisterSubSystem(subSystem);
+
+    More complex actions can be derived from SubSystemAction and be compiled
+    into the POMS source.  Please see the header file Poms.h for
+    more information.  Do not attempt this without talking to Cody McCain or
+    Chris Pinkenburg first.

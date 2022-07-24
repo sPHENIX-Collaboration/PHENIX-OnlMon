@@ -1,0 +1,43 @@
+This is an example of a template(here AuAu); an actual template is only the numbers
+0          running_average
+1000       update_rate
+300        stat_threshold
+0.03       dead_threshold
+1.0        noise_threshold
+0.115      SIGMA_HITRATE
+-3.        LOW_GOOD
+3.         HIGH_GOOD
+3.         LOW_HOT
+6.         HIGH_HOT
+-6.        LOW_COLD
+-3.        HIGH_COLD
+11         LLOAD_ALERT_RED
+12         LLOAD_ALERT_YEL
+22         HLOAD_ALERT_RED
+21         HLOAD_ALERT_YEL
+0          new_noisy_east_n
+0          new_noisy_west_n
+1578       new_dead_east_n
+1292       new_dead_west_n
+37         tzero_east
+36         tzero_west
+0.00430541 vdrift_east
+0.00423191 vdrift_west
+0.936405   eff_east
+0.907311   eff_west
+0.102873   hitrate_x1x2average[arm=1][side=1] 
+0.195769   hitrate_uv1average[arm=1][side=1]
+0.179836   hitrate_u2average[arm=1][side=1]
+0.151477   hitrate_v2average[arm=1][side=1]
+0.10009    hitrate_x1x2average[arm=1][side=2]
+0.191638         etc. over all sides for arm 1, then all for arm 2
+0.1743
+0.155519
+0.16199
+0.275233
+0.258075
+0.219066
+0.158852
+0.273809
+0.258246
+0.213311

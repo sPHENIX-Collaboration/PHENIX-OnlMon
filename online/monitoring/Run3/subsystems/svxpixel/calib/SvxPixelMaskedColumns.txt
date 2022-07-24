@@ -1,0 +1,3 @@
+#New file for run15 to mask hot columns in onlmon
+24054 6 0
+24054 7 0

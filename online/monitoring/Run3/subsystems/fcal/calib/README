@@ -1,0 +1,21 @@
+
+
+JLKlay
+19-Feb-2005
+
+In order to follow the subsystem convention of accessing online monitoring
+calibration constants from files in a subdir rather than the db, this directory
+was created and populated with Fcal online monitoring "Pre" reference values.
+
+The macro which was used to create them is checked into cvs:
+offline/packages/fcl/macros/fcalMonAnal.C
+
+In addition, a Pdbcal table was added and the calibrations committed to the
+DB with the macro:
+offline/packages/fcl/macros/commitCbCFcalPreMonitoring.C
+
+A dead channel map is added to this directory as well.  The 'dead channels' 
+are identified in the gain calibration tables in the database by negative
+gain values.  Currently there are 5 on the North and 1 on the South.  The format
+of the dead channel file is:
+[side] [col] [row]

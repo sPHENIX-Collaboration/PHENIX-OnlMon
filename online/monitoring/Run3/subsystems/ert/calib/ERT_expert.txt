@@ -1,0 +1,104 @@
+#
+##
+## ERT_expert.txt ... ERT OnlMon configuration file
+##
+##   all names are case insensitive.
+##   lines beginning with '/' or '#' are ignored.
+##
+
+################################################################
+##
+## server-side settings
+##
+
+#TRG  2000  ## -1 means no trigger selection
+#TRG 40000000
+#TRG 1f
+#TRG 40
+#TRG -1
+#CROSS  30  ## -1 (default) means no crossing selection
+#CROSS 108  ## just before ppg(laser)
+
+
+################################################################
+##
+## client-side settings
+##
+
+##
+## DMUX directory 
+##   (default /export/software/oncs/online_configuration/Arcnet/ert/hex/DMUX)
+##
+#DMUX_DIR  /export/software/oncs/online_configuration/Arcnet/ert/hex/DMUX_all_unmasked
+#DMUX_DIR  /export/software/oncs/online_configuration/Arcnet/ert/hex/DMUX_all_emc_unmasked_rich_masked
+#DMUX_DIR  /home/phnxlvl1/ert/maskcheck/dmuxmod
+
+##
+## minimum (recommended) processed event number
+##
+EVENT_MIN  5000
+
+##
+## begin/end run for rejection factor history
+##   (default = 188000  -1, where -1 means no limit)
+##
+
+#RUN_RF_HISTORY  415144  -1 # Run14 He3Au200
+#RUN_RF_HISTORY  421707  -1 # Run15 PP200
+#RUN_RF_HISTORY  443080  -1 # Run16 AuAu200
+RUN_RF_HISTORY  454778  -1 # Run16 dAu200
+
+=======
+
+##
+## N_hit thresholds for hot-tower finding
+##   first priority, it is always used when it is set
+##
+#HOT_THRESHOLD   4X4A  1000
+#HOT_THRESHOLD   4X4B  1000
+#HOT_THRESHOLD   4X4C  1000
+#HOT_THRESHOLD   2X2   1000
+#HOT_THRESHOLD   RICH  1
+
+##
+## lower limit of rejection factor for hot-tower finding
+##   second priority, it is used when it is set and HOT_THRESHOLD isn't set
+##
+
+#run14 He3Au200
+#RF_DLIMIT 4x4a 4x4A&BBC  500
+#RF_DLIMIT 4x4b 4x4B&BBC  500
+#RF_DLIMIT 4x4c 4x4C&BBC  0.01
+#RF_DLIMIT 2x2  2x2       0.01
+#RF_DLIMIT RICH EleBBC    100
+
+#Run15 pp200
+#RF_DLIMIT 4x4A 4x4A&BBCLL1  250
+#RF_DLIMIT 4x4B 4x4B         2500
+#RF_DLIMIT 4x4C 4x4C&BBCLL1  250
+#RF_DLIMIT 2x2 MPCS_2x2      1000
+#RF_DLIMIT 2x2 MPCN_2x2      1000
+
+#Run16 AuAu200
+RF_DLIMIT 4x4A 4x4A&BBCLL1 0
+RF_DLIMIT 4x4B 4x4B&BBCLL1  70
+RF_DLIMIT 4x4C 4x4C&BBCLL1  0
+RF_DLIMIT 2x2 Elec&BBCLL1 0
+RF_DLIMIT 2x2 ERTLL1_2x2 0
+RF_DLIMIT 4x4B 4x4b 60
+
+##
+## higher limit of N_evt sigma for hot-tower finding
+## third priority, it is used when the 1st and 2nd ones aren't set
+##
+#SIGMA_CUT   EMC    30
+#SIGMA_CUT   RICH   30
+
+##
+## turn on/off watching cold (too few hits) half sectors
+##   (0 = OFF (default), other = ON)
+##
+#WATCH_COLD_SECT   4X4A  1
+#WATCH_COLD_SECT   4X4B  1
+#WATCH_COLD_SECT   4X4C  1
+#WATCH_COLD_SECT   2X2   1

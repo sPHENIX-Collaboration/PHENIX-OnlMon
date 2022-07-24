@@ -1,0 +1,42 @@
+#! /bin/sh
+#
+# monitor_etpool         Start/Stop the monitoring ET pool
+#
+# chkconfig: 345  99 99
+# description: This script starts, as user phnxrc, the monitoring ET pool.
+
+# processname: 
+# pidfile: /var/run/et.pid ???
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+
+# See how we were called.
+case "$1" in
+  start)
+	echo -n "Starting  Online Monitoring ET pool: "
+	su -l phnxrc -c /etc/start_et.csh
+        RETVAL=$?
+	echo
+        [ $RETVAL -eq 0 ] && touch /var/lock/subsys/et
+	;;
+  stop)
+	echo -n "Stopping Online Monitoring ET pool: "
+        /etc/stop_et.sh
+        RETVAL=$?
+        echo
+        [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/et
+	;;
+  restart)
+  	$0 stop
+	$0 start
+	RETVAL=$?
+	;;
+  *)
+	echo "Usage: monitor_etpool {start|stop|restart}"
+	exit 1
+esac
+
+exit $RETVAL

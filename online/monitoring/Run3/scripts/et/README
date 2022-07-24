@@ -1,0 +1,12 @@
+These are the scripts which need to run on the machine which runs
+the monitoring etpool.
+etpool:        /etc/rc.d/init.d
+start_et.csh:  /etc
+stop_et.sh:    /etc
+
+This crontab entry will remove unused stations from the et pool. They tend to 
+pile up when monitors crash. It is not critical to clena them up immediately 
+but if their number exceeds a given maximum no new monitor can connect to the 
+et pool.
+# clean up unused old stations from etpool
+*/15 * * * * /export/software/oncs/proLinux/install/Linux.i686.3.2.3-sl5.3.0/bin/et_remove_station /tmp/Monitor

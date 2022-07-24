@@ -1,0 +1,149 @@
+# at least one error to create summary
+insure++.summarize_on_error 1
+# not leaks in summary
+insure++.LeakSummaryFilter -! *
+#insure++.report_overwrite false
+#show all errors which occur in the same line of code
+insure++.report_limit 1
+# return line numbers, use insures internal stack tracing
+insure++.stack_internal on
+# no leak check right now
+insure++.leak_search off
+#insure++.leak_combine none
+insure++.leak_sort size
+insure++.leak_sweep off
+insure++.leak_trace off
+#insure++.checking_uninit_min_size 1
+# change the pattern which is used to detect uninitialized memory to check
+# for false positives (mainly for shorts where the valid value is sometimes
+# 0adde)
+#insure++.checking_uninit_pattern abbabead
+#
+# Specifies the directory where Insure++ will store its cache files 
+# containing symbolic debugging information
+insure++.GusCacheDir $PWD
+#
+# overwrite the tca.log, nobody looks into it
+insure++.coverage_overwrite on
+# error output suppression
+insure++.unsuppress all
+
+# return failures by common checks
+insure++.suppress RETURN_FAILURE { access() * }
+insure++.suppress RETURN_FAILURE { fgets() * }
+insure++.suppress RETURN_FAILURE { fopen() * }
+insure++.suppress RETURN_FAILURE { fopen64() * }
+insure++.suppress RETURN_FAILURE { fread() * }
+insure++.suppress RETURN_FAILURE { getenv() * }
+insure++.suppress RETURN_FAILURE { inet_addr() * }
+insure++.suppress RETURN_FAILURE { lseek64() * }
+insure++.suppress RETURN_FAILURE { open() * }
+insure++.suppress RETURN_FAILURE { opendir() * }
+insure++.suppress RETURN_FAILURE { pclose() * }
+insure++.suppress RETURN_FAILURE { read() * }
+insure++.suppress RETURN_FAILURE { readdir() * }
+insure++.suppress RETURN_FAILURE { semget() * }
+insure++.suppress RETURN_FAILURE { shmget() * }
+insure++.suppress RETURN_FAILURE { unlink() * }
+insure++.suppress RETURN_FAILURE { utime() * }
+insure++.suppress RETURN_FAILURE { __xstat() * }
+
+#from dynamic library handling
+insure++.suppress FREE_NULL {realloc() * }
+
+# X11, root - freeing a null pointer is actually allowed results in no-op
+insure++.suppress FREE_NULL { free() * }
+
+#GEANT Common blocks
+insure++.suppress BAD_DECL at gcflag.hh:23
+insure++.suppress BAD_DECL at quest.hh:11
+
+# while loop, aborting when null pointer is returned
+insure++.suppress COPY_WILD { A_Event::createMap() * }
+insure++.suppress COPY_WILD { A_Event::existPacket* * }
+insure++.suppress COPY_WILD { A_Event::getPacket* * }
+insure++.suppress COPY_WILD { A_Event::getPacketList* * }
+
+#emc null pointer check
+insure++.suppress COPY_WILD at emcCalibrationDataHelper.C:347
+insure++.suppress COPY_WILD at emcCalibrationDataHelper.C:396
+
+# this suppresses the Root Dictionary stuff 
+insure++.suppress COPY_WILD { G__cpp_setup_* * }
+insure++.suppress COPY_WILD { G__setup_memvar* * }
+insure++.suppress EXPR_WILD { G__setup_memvar* * }
+
+# false positives, those locations have 0xadde as valid data
+# which triggers this uninit mem from insure (insure writes 0xdeadbeaf
+# for 32 bits, 0xdead for 16 bits) with other endianess it comes out 
+# to be 0xaddeafbe)
+insure++.suppress READ_UNINIT_MEM(read) { Packet_gl1p::iValue* * }
+insure++.suppress READ_UNINIT_MEM(read) { Packet_gl1::iValue* * }
+insure++.suppress READ_UNINIT_MEM(read) { DchHitLineOutv2::float2short* * }
+insure++.suppress READ_UNINIT_MEM(read) { DchHitLineOutv2::short2float* * }
+insure++.suppress READ_UNINIT_MEM(copy) { DchHitLineOutv2::short2float(short) * }
+insure++.suppress READ_UNINIT_MEM(read) { DchHitLineOutv2::getZ() * }
+insure++.suppress READ_UNINIT_MEM(copy) { DchHitLineOutv2::getZ() * }
+insure++.suppress READ_UNINIT_MEM(read) { DchHitLineOutv2::getXYZ() * }
+insure++.suppress * { lzo1x_decompress_safe() * }
+insure++.suppress * { do_compress() * }
+
+#false positives from half precision storage as shorts
+insure++.suppress READ_UNINIT_MEM(copy) { half_to_float* * }
+insure++.suppress READ_UNINIT_MEM(copy) { useInt::GetFloat* * }
+insure++.suppress READ_UNINIT_MEM(copy) { RecoverDchHits::process_event* * }
+
+insure++.suppress BAD_FORMAT(other) { Fun4AllRolloverFileOutStream::WriteEvent* * }
+
+# during et startup this sometimes happens
+insure++.suppress COPY_WILD { et_station_attach() * }
+
+# X11
+insure++.suppress RETURN_FAILURE { read() XUnlockDisplay() * }
+insure++.suppress RETURN_FAILURE { readv() XUnlockDisplay() * }
+insure++.suppress RETURN_FAILURE { write() XUnlockDisplay() * }
+insure++.suppress RETURN_FAILURE { writev() XUnlockDisplay() * }
+
+
+
+
+insure++.suppress READ_UNINIT_MEM(read) { * EmcGenericDeadRecalReco::Allocate() * }
+
+#root
+insure++.suppress FREE_NULL { realloc() compress_stored_data() store_data() * }
+insure++.suppress FREE_NULL { realloc() store_compressed_data() store_data() * }
+insure++.suppress FREE_NULL { realloc() get_gif_saved_images() * }
+insure++.suppress FREE_NULL { realloc() get_xpm_string() open_xpm_file() * }
+insure++.suppress RETURN_FAILURE { getservbyport() TUnixSystem::GetServiceByPort() * }
+insure++.suppress RETURN_FAILURE { getservbyport() TUnixSystem::UnixTcpService() * }
+insure++.suppress RETURN_FAILURE { getservbyport() TUnixSystem::UnixTcpConnect() * }
+
+#dch file reading
+
+insure++.suppress RETURN_FAILURE at DchMon.C:432
+insure++.suppress RETURN_FAILURE at DchMon.C:554
+
+#bbclvl1 dir reading
+insure++.suppress RETURN_FAILURE { readdir() BbcLvl1Mon::check_bbcll1_map_date() * }
+#bbclvl1 char lut (has valid 0xad values)
+insure++.suppress READ_UNINIT_MEM at BbcLUT.cc:156
+insure++.suppress READ_UNINIT_MEM at BbcLl1.C:449
+insure++.suppress READ_UNINIT_MEM at BbcLl1.C:452
+insure++.suppress READ_UNINIT_MEM at BbcLl1.C:455
+insure++.suppress READ_UNINIT_MEM at BbcLl1.C:458
+
+
+
+insure++.suppress RETURN_FAILURE { semget() uodbc_open_stats()  * }
+insure++.suppress RETURN_FAILURE { shmget() uodbc_open_stats()  * }
+
+insure++.suppress RETURN_FAILURE { write() tcp_write() etr_close() * }
+insure++.suppress RETURN_FAILURE { write() tcp_write() etr_station_detach() * }
+insure++.suppress RETURN_FAILURE { write() tcp_write() etr_station_remove() * }
+
+# write report to insure.report (I have seen to much gibberish from
+# insra's save to file function)
+#insure++.report_file insure.report
+#insure++.coverage_map_file $REPORT.tca
+# uncomment this line and set env var REPORT to save it in this file
+#insure++.checking_uninit_pattern 88888888

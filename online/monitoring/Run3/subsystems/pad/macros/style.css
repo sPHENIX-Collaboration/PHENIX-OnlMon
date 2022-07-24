@@ -1,0 +1,107 @@
+BODY {
+background-color: white;
+color: #000050;
+font-family: arial, helvetica, sans-serif
+}
+
+P.special:first-letter {
+font-size: 200%;
+font-weight: bold;
+letter-spacing: 0.25em;
+float: left;
+color: red;
+}
+
+TD {
+color: #000050;
+font-family: arial, helvetica, sans-serif;
+vertical-align: top
+}
+
+TD.title {
+text-align: right;
+}
+
+TH {
+font-family: arial, helvetica, sans-serif;
+text-align: center;
+color: #000050;
+}
+
+CAPTION {
+font-size: large;
+font-family: arial, helvetica, sans-serif;
+}
+
+TD.navigation {
+background-color: white
+}
+
+TD.date {
+color: white;
+background-color: #000050;
+vertical-align: middle
+}
+
+H4.date {
+vertical-align: bottom
+}
+
+TD.publish {
+color: blue;
+background-color: blue;
+width: 0.5in;
+padding: 0.1in;
+}
+
+TD.subnavigation {
+background-color: #FFFFFF
+}
+
+PRE.source {
+font-family: courier;
+color: #400020;
+}
+
+A.navigation {
+background-color: #b22222;
+color: #b22222;
+text-decoration: none
+}
+
+A:link {
+color: #b22222;
+}
+
+A:visited {
+color: #005000;
+}
+
+A.address {
+font-family: arial, helvetica, sans-serif
+}
+	  
+P.redborder {
+border-color: red;
+border-width: 0.5mm
+}
+
+H2.redborder {
+border-color: red;
+border-width: 0.5mm
+}
+
+DL.redborder {
+border-color: red;
+border-width: 1mm
+}
+
+DT {
+font-weight: bold;
+}
+
+TR.project {
+background-color: #eeeeff;
+}
+
+

@@ -1,0 +1,3 @@
+#! /bin/csh
+setenv SVXVERTEXCALIBDIR $ONLMON_CALIB
+setenv SVXVERTEXPARFILE svxPISA.par
